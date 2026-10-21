@@ -233,10 +233,8 @@ function App() {
             </h1>
 
             <p className="hero-description">
-              I'm {profile.full_name || 'a software developer'}.
-              {profile.headline ? ` ${profile.headline}.` : ''}
-              {' '}I build practical digital products through Taifatech Solutions
-              and turn ideas into systems people can use.
+              {profile.bio ||
+                'I build practical software, explore AI coding tools and business systems, and focus on maintainable code and solving real-world problems.'}
             </p>
 
             <div className="hero-actions">
