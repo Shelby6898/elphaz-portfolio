@@ -13,7 +13,8 @@ import {
   X,
   Zap,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { supabase } from './lib/supabase'
 import './App.css'
 
 const projects = [
@@ -23,7 +24,15 @@ const projects = [
     type: 'AI DEVELOPMENT TOOL',
     status: 'In development',
     description:
-      'An offline-first AI coding agent designed to help developers understand, write, test, and manage software locally.',
+      'An offline-first coding agent that helps developers work with code using locally running AI models.',
+    challenge:
+      'Make AI-assisted development more accessible without depending on a cloud API for every coding task.',
+    highlights: [
+      'React interface with a Node.js and Express backend.',
+      'Local model integration through Ollama.',
+      'Workspace-aware coding workflows and proposed code changes.',
+      'Review and approval before applying file edits.',
+    ],
     tags: ['React', 'Node.js', 'Ollama', 'Local AI'],
     icon: Terminal,
     link: 'https://github.com/Shelby6898/taifa-ai',
@@ -35,8 +44,16 @@ const projects = [
     type: 'ENTERPRISE SOFTWARE',
     status: 'Live platform',
     description:
-      'An asset management platform built around role-based access, asset tracking, transfers, maintenance, and audit trails.',
-    tags: ['JavaScript', 'Firebase', 'RBAC', 'Reporting'],
+      'An asset management platform for tracking organizational assets and managing their operational lifecycle.',
+    challenge:
+      'Give organizations clearer oversight of assets, responsibility, movement, maintenance, and accountability.',
+    highlights: [
+      'Role-based access for administrators, managers, and viewers.',
+      'Asset transfers, maintenance records, and disposal workflows.',
+      'Audit trails and operational reporting.',
+      'QR-based asset lookup and department-aware workflows.',
+    ],
+    tags: ['JavaScript', 'Firebase', 'RBAC', 'Audit trails'],
     icon: Layers3,
     link: 'https://taifatech.org',
     linkLabel: 'Visit platform',
@@ -47,7 +64,15 @@ const projects = [
     type: 'SERVICE MANAGEMENT',
     status: 'Development',
     description:
-      'A support ticketing solution focused on ICT issue reporting, ticket management, and service workflows.',
+      'An ICT support system designed to organize issue reporting and help teams manage support requests.',
+    challenge:
+      'Replace scattered support requests with a more structured process for reporting, assigning, and tracking ICT issues.',
+    highlights: [
+      'Android client built with Kotlin and XML.',
+      'Firebase-based authentication and data workflows.',
+      'Backend services for support operations and notifications.',
+      'Ticket status and service-level workflow concepts.',
+    ],
     tags: ['Kotlin', 'Firebase', 'Node.js', 'REST API'],
     icon: ShieldCheck,
     link: 'https://github.com/Shelby6898/ict-ticketing-system',
@@ -59,14 +84,21 @@ const projects = [
     type: 'PAYMENT WORKFLOWS',
     status: 'Development',
     description:
-      'A payment integration project exploring mobile money collection workflows, callback handling, and payment status tracking.',
+      'A payment workflow project exploring mobile-money collection and transaction status management.',
+    challenge:
+      'Structure a reliable payment flow that can receive provider callbacks and track transaction outcomes.',
+    highlights: [
+      'Node.js and Express backend.',
+      'M-Pesa integration workflow exploration.',
+      'Callback handling and payment status tracking.',
+      'Firebase-backed application data.',
+    ],
     tags: ['Node.js', 'Express', 'Firebase', 'M-Pesa'],
     icon: Zap,
     link: null,
     linkLabel: '',
   },
 ]
-
 const services = [
   {
     title: 'Full-stack development',
@@ -87,6 +119,61 @@ const services = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [cvUrl, setCvUrl] = useState(null)
+  const [photoUrl, setPhotoUrl] = useState(null)
+  const [profile, setProfile] = useState({
+    full_name: '',
+    headline: '',
+    bio: '',
+  })
+
+  useEffect(() => {
+    let active = true
+
+    async function loadPublicProfile() {
+      if (!supabase) return
+
+      const { data, error } = await supabase
+        .from('portfolio_profile')
+        .select('full_name, headline, bio, cv_path, photo_path')
+        .eq('id', 1)
+        .maybeSingle()
+
+      if (!active || error || !data) return
+
+      setProfile({
+        full_name: data.full_name || '',
+        headline: data.headline || '',
+        bio: data.bio || '',
+      })
+
+      if (data.cv_path) {
+        const { data: cvData } = supabase.storage
+          .from('profile-cv')
+          .getPublicUrl(data.cv_path)
+
+        if (active && cvData?.publicUrl) {
+          setCvUrl(cvData.publicUrl)
+        }
+      }
+
+      if (data.photo_path) {
+        const { data: photoData } = supabase.storage
+          .from('profile-photos')
+          .getPublicUrl(data.photo_path)
+
+        if (active && photoData?.publicUrl) {
+          setPhotoUrl(photoData.publicUrl)
+        }
+      }
+    }
+
+    loadPublicProfile()
+
+    return () => {
+      active = false
+    }
+  }, [])
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -94,8 +181,14 @@ function App() {
     <div className="site-shell">
       <header className="navbar">
         <a className="brand" href="#home" onClick={closeMenu}>
-          <span className="brand-mark">E.</span>
-          <span>ELPHAZ SHELBY</span>
+          {photoUrl && (
+            <img
+              className="brand-profile-photo"
+              src={photoUrl}
+              alt=""
+            />
+          )}
+          <span>{profile.full_name || 'Your Name'}</span>
         </a>
 
         <button
@@ -128,7 +221,7 @@ function App() {
           <div className="hero-copy">
             <div className="availability">
               <span className="status-dot" />
-              DEVELOPER · FOUNDER · PROBLEM SOLVER
+              {(profile.headline || 'Software Developer').toUpperCase()}
             </div>
 
             <h1>
@@ -140,9 +233,10 @@ function App() {
             </h1>
 
             <p className="hero-description">
-              I'm Elphaz Shelby, an IT student and software developer
-              building practical digital products through Taifatech Solutions.
-              I turn ideas into systems people can use.
+              I'm {profile.full_name || 'a software developer'}.
+              {profile.headline ? ` ${profile.headline}.` : ''}
+              {' '}I build practical digital products through Taifatech Solutions
+              and turn ideas into systems people can use.
             </p>
 
             <div className="hero-actions">
@@ -157,6 +251,16 @@ function App() {
               >
                 <Code2 size={18} /> GitHub profile
               </a>
+              {cvUrl && (
+                <a
+                  className="button-secondary"
+                  href={cvUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View my CV <ArrowUpRight size={18} />
+                </a>
+              )}
             </div>
 
             <div className="hero-footnote">
@@ -291,15 +395,8 @@ function App() {
             </div>
             <div className="about-copy">
               <p>
-                I’m pursuing a Bachelor of Science in Information Technology
-                at Kaimosi Friends University while building software that
-                connects technical learning with real operational needs.
-              </p>
-              <p>
-                Through Taifatech Solutions, I’m exploring AI coding tools,
-                business software, payment workflows, and secure application
-                development. I value maintainable code, honest testing, and
-                solving the right problem before adding complexity.
+                {profile.bio ||
+                  'I build practical software, explore AI coding tools and business systems, and focus on maintainable code and solving real-world problems.'}
               </p>
               <a
                 className="text-link"
@@ -361,11 +458,21 @@ function App() {
       </main>
 
       <footer className="footer section-wrap">
-        <a className="brand" href="#home">
-          <span className="brand-mark">E.</span>
-          <span>ELPHAZ SHELBY</span>
+        <a className="footer-identity" href="#home" aria-label="Back to homepage">
+          <span className="footer-identity-copy">
+            <span className="footer-name">{profile.full_name || 'Your Name'}</span>
+            <span className="footer-profession">
+              {profile.headline || 'Software Developer'}
+            </span>
+          </span>
         </a>
-        <span>Designed with intent. Built in Kenya.</span>
+
+        <div className="footer-meta">
+          <span className="footer-copyright">
+            © {new Date().getFullYear()} {profile.full_name || 'Your Name'}. All rights reserved.
+          </span>
+        </div>
+
         <a href="#home" className="back-to-top">Back to top ↑</a>
       </footer>
     </div>
