@@ -15,6 +15,7 @@ export default function ProfileEditor() {
   })
   const [photoFile, setPhotoFile] = useState(null)
   const [cvFile, setCvFile] = useState(null)
+  const [cvCleanupPath, setCvCleanupPath] = useState(null)
   const [cvPickerStatus, setCvPickerStatus] = useState('Waiting for file selection.')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -295,6 +296,80 @@ export default function ProfileEditor() {
     }
   }
 
+  async function deleteCv() {
+    if (!profile.cv_path || saving) return
+
+    if (!window.confirm('Delete the current CV from your public portfolio? This cannot be undone.')) {
+      return
+    }
+
+    setError('')
+    setMessage('')
+    setSaving(true)
+
+    const oldPath = profile.cv_path
+
+    try {
+      const { data, error: updateError } = await supabase
+        .from('portfolio_profile')
+        .update({
+          cv_path: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1)
+        .select('cv_path')
+        .single()
+
+      if (updateError) throw updateError
+
+      if (!data || data.cv_path !== null) {
+        throw new Error('The database did not confirm CV removal.')
+      }
+
+      setProfile((current) => ({ ...current, cv_path: null }))
+      setCvFile(null)
+      setCvCleanupPath(oldPath)
+
+      const { error: removeError } = await supabase.storage
+        .from('profile-cv')
+        .remove([oldPath])
+
+      if (removeError) {
+        setMessage('CV removed from your public portfolio, but its stored file could not be deleted. You can retry below.')
+      } else {
+        setCvCleanupPath(null)
+        setMessage('CV deleted. Your public portfolio no longer displays a CV link.')
+      }
+    } catch (deleteError) {
+      setError(deleteError.message || 'Could not delete the CV.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function retryCvCleanup() {
+    if (!cvCleanupPath || saving) return
+
+    setError('')
+    setMessage('')
+    setSaving(true)
+
+    try {
+      const { error: removeError } = await supabase.storage
+        .from('profile-cv')
+        .remove([cvCleanupPath])
+
+      if (removeError) throw removeError
+
+      setCvCleanupPath(null)
+      setMessage('The previous CV file was successfully deleted from storage.')
+    } catch (cleanupError) {
+      setError(cleanupError.message || 'Could not remove the stored CV file.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   if (loading) {
     return <p>Loading saved profile...</p>
   }
@@ -397,14 +472,32 @@ export default function ProfileEditor() {
 
       <section className="editor-section">
         <h2>Curriculum vitae</h2>
-        <p>PDF only · Maximum 5 MB</p>
+        <p>Optional · PDF only · Maximum 5 MB</p>
 
-        {savedCvUrl && (
-          <p>
-            <a href={savedCvUrl} target="_blank" rel="noreferrer">
-              View current CV
-            </a>
-          </p>
+        {savedCvUrl ? (
+          <>
+            <p>
+              <a href={savedCvUrl} target="_blank" rel="noreferrer">
+                View current CV
+              </a>
+            </p>
+            <button type="button" onClick={deleteCv} disabled={saving}>
+              {saving ? 'Please wait...' : 'Delete current CV'}
+            </button>
+          </>
+        ) : (
+          <p>No CV is currently published on your portfolio.</p>
+        )}
+
+        {cvCleanupPath && (
+          <div>
+            <p role="status">
+              The public CV link has been removed, but an old storage file remains.
+            </p>
+            <button type="button" onClick={retryCvCleanup} disabled={saving}>
+              {saving ? 'Please wait...' : 'Retry deleting stored CV file'}
+            </button>
+          </div>
         )}
 
         <label htmlFor="cv-file-input">Select your CV PDF</label>
