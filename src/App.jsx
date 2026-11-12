@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
 import './App.css'
+import AnalyticsConsent from './AnalyticsConsent'
 
 const projects = [
   {
@@ -512,6 +513,7 @@ function App() {
 
         <a href="#home" className="back-to-top">Back to top ↑</a>
       </footer>
+      <AnalyticsConsent />
     </div>
   )
 }

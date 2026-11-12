@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
 import ProfileEditor from './ProfileEditor'
+import AnalyticsDashboard from './AnalyticsDashboard'
+import AnalyticsErrorBoundary from './AnalyticsErrorBoundary'
 import './Admin.css'
 
 export default function Admin() {
@@ -390,6 +392,9 @@ export default function Admin() {
         <p>Signed in as {session.user.email}</p>
 
         <ProfileEditor />
+        <AnalyticsErrorBoundary>
+          <AnalyticsDashboard />
+        </AnalyticsErrorBoundary>
 
         <button type="button" onClick={handleLogout}>Sign out</button>
       </section>
