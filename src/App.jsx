@@ -98,6 +98,27 @@ const projects = [
     link: null,
     linkLabel: '',
   },
+
+  {
+    number: '05',
+    name: 'Celestique Beauty Spa',
+    type: 'CLIENT PROJECT / BUSINESS PLATFORM',
+    status: 'Live client website',
+    description:
+      'A responsive beauty and wellness business platform developed by Taifatech Solutions, with online appointment requests and an administrative workspace.',
+    challenge:
+      'Give a service-based business a professional online presence while making appointment handling and day-to-day administration more structured.',
+    highlights: [
+      'Responsive public website for service discovery and appointment requests.',
+      'Supabase-backed application data and appointment workflows.',
+      'Protected administration tools for managing appointment activity.',
+      'Operational reporting, privacy documentation, and security improvements.',
+    ],
+    tags: ['React', 'Supabase', 'Online appointments', 'Admin dashboard', 'Privacy & security'],
+    icon: BriefcaseBusiness,
+    link: 'https://celestique-beauty-spa.vercel.app/',
+    linkLabel: 'Visit live website',
+  },
 ]
 const services = [
   {
@@ -354,6 +375,24 @@ function App() {
                   <span className="eyebrow">{project.type}</span>
                   <h3>{project.name}</h3>
                   <p>{project.description}</p>
+
+                  {project.challenge && (
+                    <div className="project-case-study">
+                      <span className="case-label">THE CHALLENGE</span>
+                      <p className="case-challenge">{project.challenge}</p>
+                      {project.highlights?.length > 0 && (
+                        <>
+                          <span className="case-label">IMPLEMENTATION</span>
+                          <ul className="case-highlights">
+                            {project.highlights.map((highlight) => (
+                              <li key={highlight}>{highlight}</li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    </div>
+                  )}
+
 
                   <div className="tag-list">
                     {project.tags.map((tag) => (
