@@ -14,6 +14,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { supabase } from './lib/supabase'
 import './App.css'
 
@@ -473,6 +474,7 @@ function App() {
 
         <a href="#home" className="back-to-top">Back to top ↑</a>
       </footer>
+      <Analytics />
     </div>
   )
 }
