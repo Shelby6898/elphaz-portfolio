@@ -41,46 +41,6 @@ const projects = [
   },
   {
     number: '02',
-    name: 'Taifa Asset Manager',
-    type: 'ENTERPRISE SOFTWARE',
-    status: 'Live platform',
-    description:
-      'An asset management platform for tracking organizational assets and managing their operational lifecycle.',
-    challenge:
-      'Give organizations clearer oversight of assets, responsibility, movement, maintenance, and accountability.',
-    highlights: [
-      'Role-based access for administrators, managers, and viewers.',
-      'Asset transfers, maintenance records, and disposal workflows.',
-      'Audit trails and operational reporting.',
-      'QR-based asset lookup and department-aware workflows.',
-    ],
-    tags: ['JavaScript', 'Firebase', 'RBAC', 'Audit trails'],
-    icon: Layers3,
-    link: 'https://taifatech.org',
-    linkLabel: 'Visit platform',
-  },
-  {
-    number: '03',
-    name: 'ICT Ticketing System',
-    type: 'SERVICE MANAGEMENT',
-    status: 'Development',
-    description:
-      'An ICT support system designed to organize issue reporting and help teams manage support requests.',
-    challenge:
-      'Replace scattered support requests with a more structured process for reporting, assigning, and tracking ICT issues.',
-    highlights: [
-      'Android client built with Kotlin and XML.',
-      'Firebase-based authentication and data workflows.',
-      'Backend services for support operations and notifications.',
-      'Ticket status and service-level workflow concepts.',
-    ],
-    tags: ['Kotlin', 'Firebase', 'Node.js', 'REST API'],
-    icon: ShieldCheck,
-    link: 'https://github.com/Shelby6898/ict-ticketing-system',
-    linkLabel: 'Explore repository',
-  },
-  {
-    number: '04',
     name: 'Bungoma Pay',
     type: 'PAYMENT WORKFLOWS',
     status: 'Development',
@@ -102,7 +62,7 @@ const projects = [
   },
 
   {
-    number: '05',
+    number: '03',
     name: 'Celestique Beauty Spa',
     type: 'CLIENT PROJECT / BUSINESS PLATFORM',
     status: 'Live client website',
