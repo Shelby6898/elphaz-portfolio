@@ -144,6 +144,45 @@
 .project-card-bottom > a { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 10px; font-weight: 700; }
 .project-private { color: #a1a1aa; font-size: 9px; text-align: right; }
 
+/* Keep project tags and card actions readable at narrow widths. */
+.tag-list {
+  align-items: flex-start;
+}
+
+.tag-list span {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.project-card-bottom {
+  flex-wrap: wrap;
+}
+
+.project-status {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.project-card-bottom > .project-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 1 auto;
+  gap: 5px;
+  min-width: 0;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.project-link span {
+  display: inline-block;
+}
+
 .about-section { padding: 90px 0; border-block: 1px solid #242429; background: #0d0d10; }
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 65px; align-items: start; }
 .about-copy p + p { margin-top: 17px; }
