@@ -452,7 +452,6 @@ function App() {
             <div className="contact-links">
               <a href="mailto:elphazshelby@gmail.com">Email</a>
               <a href="https://github.com/Shelby6898" target="_blank" rel="noreferrer">GitHub</a>
-              <a href="https://taifatech.org" target="_blank" rel="noreferrer">Taifatech</a>
             </div>
           </div>
         </section>
