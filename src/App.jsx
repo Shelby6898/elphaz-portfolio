@@ -85,19 +85,20 @@ const projects = [
     type: 'PAYMENT WORKFLOWS',
     status: 'Development',
     description:
-      'A payment workflow project exploring mobile-money collection and transaction status management.',
+      'A revenue collection platform designed to help administrators and field officers manage payments, transactions, and operational reporting.',
     challenge:
-      'Structure a reliable payment flow that can receive provider callbacks and track transaction outcomes.',
+      'Bring mobile-money collection and day-to-day revenue operations into one system with clearer transaction visibility and role-based workflows.',
     highlights: [
-      'Node.js and Express backend.',
-      'M-Pesa integration workflow exploration.',
-      'Callback handling and payment status tracking.',
-      'Firebase-backed application data.',
+      'React and Vite administration interface with dedicated admin and officer workflows.',
+      'Node.js and Express API integrated with Firebase Authentication and Cloud Firestore.',
+      'Safaricom Daraja M-Pesa STK Push and callback-processing workflows.',
+      'Transaction history, revenue summaries, officer management, and operational reports.',
+      'Broadcast messaging, SMS notification integration, and offline transaction synchronization.',
     ],
-    tags: ['Node.js', 'Express', 'Firebase', 'M-Pesa'],
+    tags: ['React', 'Node.js', 'Express', 'Firebase', 'M-Pesa Daraja', 'REST API'],
     icon: Zap,
-    link: null,
-    linkLabel: '',
+    link: 'https://github.com/Shelby6898/bungoma-pay',
+    linkLabel: 'Explore repository',
   },
 
   {
