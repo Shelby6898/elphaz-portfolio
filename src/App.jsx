@@ -409,12 +409,14 @@ function App() {
                     </span>
                     {project.link ? (
                       <a
+                        className="project-link"
                         href={project.link}
                         target="_blank"
                         rel="noreferrer"
                         aria-label={`${project.linkLabel}: ${project.name}`}
                       >
-                        {project.linkLabel} <ArrowUpRight size={16} />
+                        <span>{project.linkLabel}</span>
+                        <ArrowUpRight size={16} />
                       </a>
                     ) : (
                       <span className="project-private">Details available on request</span>
