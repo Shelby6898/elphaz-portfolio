@@ -51,10 +51,18 @@ An IT support and ticket management system focused on organizing service request
 
 ### Bungoma Pay
 
-A payment workflow project exploring payment integration and transaction status handling.
+A revenue collection platform designed to support administrators and field officers with mobile-money payment workflows and day-to-day revenue operations.
 
-- Technologies: Node.js, Express, Firebase, M-Pesa integration
-- Status: In development
+- Frontend: React, Vite, React Router, and Lucide React
+- Backend: Node.js, Express, and REST APIs
+- Data and identity: Firebase Authentication and Cloud Firestore
+- Payment integration: Safaricom Daraja M-Pesa STK Push and callback-processing workflows
+- Operations: Transaction history, revenue summaries, officer management, reports, broadcasts, and offline transaction synchronization
+- Notifications: Africa's Talking SMS integration
+- Status: In development; payment workflows and operational features are being built and refined
+- Repository: https://github.com/Shelby6898/bungoma-pay
+
+The project is being developed with a separate administration experience and officer-facing workflows. Payment integration is documented as an implemented application workflow, not a claim that every live payment scenario has been production-verified.
 
 ## Technology Stack
 
